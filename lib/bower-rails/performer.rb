@@ -119,6 +119,10 @@ module BowerRails
       # Resolve relative paths in CSS
       Dir['bower_components/**/*.css'].each do |filename|
         contents = File.read(filename) if FileTest.file?(filename)
+
+        # don't bail out on invalid UTF-8 chars
+        contents = contents.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') if contents
+
         # http://www.w3.org/TR/CSS2/syndata.html#uri
         url_regex = /url\(\s*['"]?(?![a-z]+:)([^'"\)]*)['"]?\s*\)/
 
